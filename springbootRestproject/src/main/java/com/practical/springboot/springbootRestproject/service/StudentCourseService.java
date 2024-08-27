@@ -53,6 +53,12 @@ public class StudentCourseService {
 	public List<Course> retriveAllCourse() {
 		return courseList;
 	}
+	public Course retriveCourseByCourseID(int courseID) {
+		return courseList.stream().filter(courseId->courseId.getCourseId() == courseID)
+		.findAny()
+		.orElse(null);
+		
+	}
 
 	public List<Course> retriveCourse(int studentId) {
 		Student student = getStudentByID(studentId);

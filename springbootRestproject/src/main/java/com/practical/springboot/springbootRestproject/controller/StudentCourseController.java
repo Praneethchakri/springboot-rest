@@ -45,15 +45,6 @@ public class StudentCourseController {
 		}
 	}
 
-//	@GetMapping()
-//	public ResponseEntity<List<Course>> getCourseListofStudent() {
-//		List<Course> listCourse = studentCourseService.retriveAllCourse();
-//		if (listCourse != null) {
-//			return ResponseEntity.ok(listCourse);
-//		} else {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
 
 	@PostMapping()
 	public ResponseEntity<Void> addCourseToStudent(@PathVariable("studentId") int studentId,
