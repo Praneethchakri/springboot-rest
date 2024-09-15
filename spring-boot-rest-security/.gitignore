@@ -46,3 +46,7 @@ out/
 
 # Ignore all .class files in the target directory
 /target/**/*.class
+# Ignore all files in the target directory
+/target/
+.settings/*
+.classpath
