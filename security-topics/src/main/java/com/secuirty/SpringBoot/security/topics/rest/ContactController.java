@@ -1,0 +1,14 @@
+package com.secuirty.SpringBoot.security.topics.rest;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ContactController {
+
+	@GetMapping("/contactDetils")
+	public String getContactDetails() {
+		return "Contact Details API Called..!";
+	}
+
+}
