@@ -1,6 +1,4 @@
-package com.deportment.data.service.deportmentExchang.dto;
-
-import java.util.List;
+package com.employee.data.service.employementExchange.dto;
 
 
 public class DeportmentDTO {
@@ -8,8 +6,6 @@ public class DeportmentDTO {
     private String deportmentName;
     private String deportmentDescription;
     private String deportmentCode;
-
-    private List<EmployeeDTO> employeeDTOList;
 
     public DeportmentDTO() {
     }

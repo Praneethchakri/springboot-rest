@@ -1,25 +1,13 @@
-package com.employee.data.service.employementExchange.entityModel;
+package com.deportment.data.service.deportmentExchang.dto;
 
-import jakarta.persistence.*;
-
-
-@Entity
-@Table(name = "EmployeeUserData")
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeDTO {
     private Long id;
-    @Column(name = "first_Name",nullable = false)
     private String firstName;
-    @Column(name="last_Name",nullable = false)
     private String lastName;
-    @Column(name="email_Id",nullable = false)
     private String email;
-
-    @Column(name="deportmentCode")
     private String deportmentCode;
 
-    public Employee(Long id, String firstName, String lastName, String email,String deportmentCode) {
+    public EmployeeDTO(Long id, String firstName, String lastName, String email, String deportmentCode) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,36 +15,35 @@ public class Employee {
         this.deportmentCode = deportmentCode;
     }
 
-    public Employee() {
-
+    public EmployeeDTO() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {

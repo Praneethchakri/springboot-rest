@@ -1,5 +1,6 @@
 package com.employee.data.service.employementExchange.controller;
 
+import com.employee.data.service.employementExchange.dto.APIResponseDTO;
 import com.employee.data.service.employementExchange.dto.EmployeeDTO;
 import com.employee.data.service.employementExchange.exception.ResponseModel;
 import com.employee.data.service.employementExchange.services.EmployeeDataService;
@@ -31,9 +32,9 @@ public class EmployeeDataController {
     }
     @GetMapping("/getEmployeeByID")
     public ResponseEntity<?> getEmployeeById(@RequestParam Long id) {
-        Optional<EmployeeDTO> employeeDTO;
-            employeeDTO = employeeDataService.findUserById(id);
-        return new ResponseEntity<>(employeeDTO.get(), HttpStatus.OK);
+        Optional<APIResponseDTO>
+        apiResponseDTO = employeeDataService.findEmployeeById(id);
+        return new ResponseEntity<>(apiResponseDTO.get(), HttpStatus.OK);
     }
 
     @GetMapping("/AllEmployee")

@@ -1,15 +1,19 @@
 package com.employee.data.service.employementExchange.services;
 
+import com.employee.data.service.employementExchange.dto.APIResponseDTO;
+import com.employee.data.service.employementExchange.dto.DeportmentDTO;
 import com.employee.data.service.employementExchange.dto.EmployeeDTO;
 import com.employee.data.service.employementExchange.entityModel.Employee;
 import com.employee.data.service.employementExchange.exception.EmailAlreadyExistException;
 import com.employee.data.service.employementExchange.exception.EmployeeNotFoundException;
 import com.employee.data.service.employementExchange.mapper.EmployeeMapperStruct;
-import com.employee.data.service.employementExchange.mapper.UserMapperUtility;
+import com.employee.data.service.employementExchange.mapper.EmployeeMapperUtility;
 import com.employee.data.service.employementExchange.repository.EmployeeDataRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +24,13 @@ import java.util.stream.Collectors;
 public class EmployeeDataServiceImpl implements  EmployeeDataService{
     private EmployeeDataRepository employeeDataRepository;
 
+    private RestTemplate restTemplate;
+
+    private WebClient webClient;
 //    private ModelMapper modelMapper;
 
     @Override
     public EmployeeDTO createUser(EmployeeDTO userDTO) {
-
-
 
         Optional<Employee> employeeByMaiId = employeeDataRepository.findEmployeeByEmail(userDTO.getEmail());
         if(employeeByMaiId.isPresent()){
@@ -55,7 +60,8 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
                 u.getId(),
                 u.getFirstName(),
                 u.getLastName(),
-                u.getEmail()
+                u.getEmail(),
+                u.getDeportmentCode()
         );
 
         Employee user=  employeeDataRepository.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee","id",u.getId()));
@@ -63,6 +69,7 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
             user.setEmail(u.getEmail());
             user.setFirstName(u.getFirstName());
             user.setLastName(u.getLastName());
+
 //            UserDTO updatedUserDTO = UserMapperUtility.convertToUserDTO(user); --> utlity MEthod
         /**
          * USing MapStruct Utility we are mapping the data between the entity/JPA class and DTO class
@@ -72,18 +79,32 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
     }
 
     @Override
-    public Optional<EmployeeDTO> findUserById(Long id) {
+    public Optional<APIResponseDTO> findEmployeeById(Long id) {
 
         Employee returnObejct=  employeeDataRepository.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee","id",id));
 //        Employee user = retunObejct.get();
 //        UserDTO userDTO = UserMapperUtility.convertToUserDTO(user);
+//        ResponseEntity<DeportmentDTO> deportmentREST_Response =
+//                restTemplate.getForEntity("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode(), DeportmentDTO.class);
+//        DeportmentDTO deptBody = deportmentREST_Response.getBody();
+
+       DeportmentDTO deportmentDTO= webClient
+                .get()
+                .uri("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode())
+                .retrieve()
+                .bodyToMono(DeportmentDTO.class)
+                .block();// To make Synchronous Call
+
+
         /**
          * USing MapStruct Utility we are mapping the data between the entity/JPA class and DTO class
          */
-        EmployeeDTO userDTO = EmployeeMapperStruct.USER_MAPPER_STRUCT.mapToUserDTO(returnObejct);
-        return Optional.of(userDTO);
+        EmployeeDTO employeeDTO = EmployeeMapperStruct.USER_MAPPER_STRUCT.mapToUserDTO(returnObejct);
+        APIResponseDTO apiResponseDTO = new APIResponseDTO();
+            apiResponseDTO.setEmployeeDTO(employeeDTO);
+            apiResponseDTO.setDeportmentDTO(deportmentDTO);
+        return Optional.of(apiResponseDTO);
     }
-
     @Override
     public List<EmployeeDTO> findAllUser() {
         List<Employee> returnListObejct=  employeeDataRepository.findAll();
@@ -106,7 +127,7 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
 
     public static List<EmployeeDTO> converListData(List<Employee> inputList){
         List<EmployeeDTO> result = inputList.stream()
-                .map(UserMapperUtility::convertToUserDTO)
+                .map(EmployeeMapperUtility::convertToUserDTO)
                 .collect(Collectors.toList());
         return  result;
 
