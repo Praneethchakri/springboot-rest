@@ -19,7 +19,6 @@ public class DeportmentServiceImpl implements  DeportmentService{
 
     private DeportmentRepository deportmentRepository;
     private WebClient webClient;
-
     private ApiClient apiClientOfFeignClient;
 
     public DeportmentServiceImpl(DeportmentRepository deportmentRepository, WebClient webClient, ApiClient apiClientOfFeignClient) {
