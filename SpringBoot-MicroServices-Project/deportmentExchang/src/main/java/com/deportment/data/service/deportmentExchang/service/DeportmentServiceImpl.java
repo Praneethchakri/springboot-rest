@@ -5,7 +5,6 @@ import com.deportment.data.service.deportmentExchang.dto.DeportmentDTO;
 import com.deportment.data.service.deportmentExchang.dto.EmployeeDTO;
 import com.deportment.data.service.deportmentExchang.entity.Deportment;
 import com.deportment.data.service.deportmentExchang.repository.DeportmentRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,11 +14,19 @@ import java.util.stream.Collectors;
 
 import static com.deportment.data.service.deportmentExchang.mapper.DeportmentMapStruct.DEPORTMENT_MAP_STRUCT;
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class DeportmentServiceImpl implements  DeportmentService{
 
     private DeportmentRepository deportmentRepository;
     private WebClient webClient;
+
+    private ApiClient apiClientOfFeignClient;
+
+    public DeportmentServiceImpl(DeportmentRepository deportmentRepository, WebClient webClient, ApiClient apiClientOfFeignClient) {
+        this.deportmentRepository = deportmentRepository;
+        this.webClient = webClient;
+        this.apiClientOfFeignClient = apiClientOfFeignClient;
+    }
 
     @Override
     public DeportmentDTO saveDeportment(DeportmentDTO deportmentDTO) {
@@ -39,22 +46,36 @@ public class DeportmentServiceImpl implements  DeportmentService{
         return deportmentDTO;
     }
     @Override
-    public DeportmentDTO findDeportmentByName(String deportmentName){
+    public APIresponseDTO findDeportmentByName(String deportmentName){
         Deportment repoResultBydeptName = deportmentRepository.findDeportmentByDeportmentName(deportmentName);
+
+        ResponseEntity<List<EmployeeDTO>> empList = webClient.get().uri("http://localhost:8080/employee-Data/AllEmployee")
+                        .retrieve()
+                                .toEntityList(EmployeeDTO.class)
+                                        .block();
+
+
+        List<EmployeeDTO> filterdEmplist = empList.getBody().stream().filter(employee->employee.getDeportmentCode().equalsIgnoreCase(repoResultBydeptName.getDeportmentCode()))
+                        .collect(Collectors.toList());
+
         DeportmentDTO deportmentDTO = DEPORTMENT_MAP_STRUCT.mapToDeportmentDTO(repoResultBydeptName);
-        return  deportmentDTO;
+//        List<EmployeeDTO> employeeDTOList =  apiClientOfFeignClient.getAllExistingEmployee();
+        return  new APIresponseDTO(deportmentDTO,filterdEmplist);
     }
 
     @Override
     public APIresponseDTO findEmployessByDeportmentCode(String deportmentCode) {
         Deportment repoResult = deportmentRepository.findDeportmentByDeportmentCode(deportmentCode);
         DeportmentDTO deportmentDTO  = DEPORTMENT_MAP_STRUCT.mapToDeportmentDTO(repoResult);
-        ResponseEntity<List<EmployeeDTO>> employeeDTOList = webClient.get()
-                .uri("http://localhost:8080/employee-Data/AllEmployee")
-                .retrieve()
-                .toEntityList(EmployeeDTO.class)
-                .block();
-        List<EmployeeDTO> fetchBody = employeeDTOList.getBody().stream().filter(code->code.getDeportmentCode().equalsIgnoreCase(deportmentCode)).collect(Collectors.toList());
+//        ResponseEntity<List<EmployeeDTO>> employeeDTOList = webClient.get()
+//                .uri("http://localhost:8080/employee-Data/AllEmployee")
+//                .retrieve()
+//                .toEntityList(EmployeeDTO.class)
+//                .block();
+        List<EmployeeDTO> employeeDTOList =  apiClientOfFeignClient.getAllExistingEmployee();
+//        List<EmployeeDTO> filterdEmplist =   employeeDTOList.stream().filter(employeeDTO -> employeeDTO.getDeportmentCode().equalsIgnoreCase(repoResultBydeptName.getDeportmentCode()))
+//                .collect(Collectors.toList());
+        List<EmployeeDTO> fetchBody = employeeDTOList.stream().filter(code->code.getDeportmentCode().equalsIgnoreCase(deportmentCode)).collect(Collectors.toList());
 
         APIresponseDTO apIresponseDTO = new APIresponseDTO();
              apIresponseDTO.setDeportmentDTO(deportmentDTO);

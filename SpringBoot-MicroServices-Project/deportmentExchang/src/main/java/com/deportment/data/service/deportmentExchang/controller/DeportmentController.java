@@ -32,8 +32,8 @@ public class DeportmentController {
         return new ResponseEntity<>(resultDeportment,HttpStatus.OK);
     }
     @GetMapping()
-    public ResponseEntity<DeportmentDTO> getDeportmentByName(@RequestParam(name = "deportmentName") String name){
-        DeportmentDTO result = deportmentService.findDeportmentByName(name);
+    public ResponseEntity<APIresponseDTO> getDeportmentByName(@RequestParam(name = "deportmentName") String name){
+        APIresponseDTO result = deportmentService.findDeportmentByName(name);
         return  new ResponseEntity<>(result,HttpStatus.OK);
     }
 

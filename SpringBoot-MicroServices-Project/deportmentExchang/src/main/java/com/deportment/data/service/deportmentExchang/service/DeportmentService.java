@@ -8,7 +8,9 @@ public interface DeportmentService {
     DeportmentDTO saveDeportment(DeportmentDTO deportmentDTO);
     DeportmentDTO findDeportmentByDeportmentCode(String deportmentCode);
 
-    DeportmentDTO findDeportmentByName(String deportmentName);
+    APIresponseDTO findDeportmentByName(String deportmentName);
 
     APIresponseDTO findEmployessByDeportmentCode(String deportmentCode);
+
+
 }

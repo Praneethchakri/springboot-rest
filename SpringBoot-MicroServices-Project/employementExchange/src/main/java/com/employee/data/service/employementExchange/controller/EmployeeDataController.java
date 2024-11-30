@@ -32,9 +32,9 @@ public class EmployeeDataController {
     }
     @GetMapping("/getEmployeeByID")
     public ResponseEntity<?> getEmployeeById(@RequestParam Long id) {
-        Optional<APIResponseDTO>
-        apiResponseDTO = employeeDataService.findEmployeeById(id);
-        return new ResponseEntity<>(apiResponseDTO.get(), HttpStatus.OK);
+        Optional<APIResponseDTO> employeeDTO;
+            employeeDTO = employeeDataService.findEmployeeById(id);
+        return new ResponseEntity<>(employeeDTO.get(), HttpStatus.OK);
     }
 
     @GetMapping("/AllEmployee")

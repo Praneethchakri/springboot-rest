@@ -89,13 +89,10 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
 //        DeportmentDTO deptBody = deportmentREST_Response.getBody();
 
        DeportmentDTO deportmentDTO= webClient
-                .get()
-                .uri("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode())
+               .get().uri("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode())
                 .retrieve()
                 .bodyToMono(DeportmentDTO.class)
                 .block();// To make Synchronous Call
-
-        //TEST Commit
 
 
         /**
