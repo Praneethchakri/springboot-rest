@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(url = "http://localhost:8080",value = "EMPLOYEE-SERVICES")
+//@FeignClient(url = "http://localhost:8080",value = "EMPLOYEE-SERVICES") -- > Hardcoded url
+
+@FeignClient(name = "EMPLOYEE-EXCHANGE-SERVICE")
 public interface ApiClient {
 
     @GetMapping("/employee-Data/AllEmployee")

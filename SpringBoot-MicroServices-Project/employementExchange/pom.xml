@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,10 +40,6 @@
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -79,6 +76,7 @@
 			<version>21.7.0.0</version> <!-- Use the latest compatible version -->
 			<scope>runtime</scope>
 		</dependency>
+
 		<!--	Using ModelMapper to map the data modeling between the Enity and DTO classes-->
 		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
@@ -98,7 +96,19 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.6.3</version>
 		</dependency>
+		<!--Service Registry Client Dependency- EmployeeExchange Service as Client to GlobalRegistryService-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<!-- Service Registry Client Dependency End-->
 
+		<!--Spring Cloud Open Feign Dependency-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<!--Spring Cloud Open Feign End -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -106,6 +116,17 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>

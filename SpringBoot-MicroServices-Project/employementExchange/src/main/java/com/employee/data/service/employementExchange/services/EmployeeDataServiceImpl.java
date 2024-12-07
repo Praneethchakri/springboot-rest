@@ -10,7 +10,8 @@ import com.employee.data.service.employementExchange.mapper.EmployeeMapperStruct
 import com.employee.data.service.employementExchange.mapper.EmployeeMapperUtility;
 import com.employee.data.service.employementExchange.repository.EmployeeDataRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,14 +21,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class EmployeeDataServiceImpl implements  EmployeeDataService{
     private EmployeeDataRepository employeeDataRepository;
 
     private RestTemplate restTemplate;
 
     private WebClient webClient;
+
+    private ApiDptClient openFeignDeptAsClient;
 //    private ModelMapper modelMapper;
+
+    @Autowired
+    public EmployeeDataServiceImpl(EmployeeDataRepository employeeDataRepository, RestTemplate restTemplate, WebClient webClient, ApiDptClient openFeignDeptAsClient) {
+        this.employeeDataRepository = employeeDataRepository;
+        this.restTemplate = restTemplate;
+        this.webClient = webClient;
+        this.openFeignDeptAsClient = openFeignDeptAsClient;
+    }
 
     @Override
     public EmployeeDTO createUser(EmployeeDTO userDTO) {
@@ -75,33 +86,39 @@ public class EmployeeDataServiceImpl implements  EmployeeDataService{
          * USing MapStruct Utility we are mapping the data between the entity/JPA class and DTO class
          */
             EmployeeDTO updatedEmployeeDTO = EmployeeMapperStruct.USER_MAPPER_STRUCT.mapToUserDTO(user);
-        return  updatedEmployeeDTO;
+            return  updatedEmployeeDTO;
     }
 
     @Override
     public Optional<APIResponseDTO> findEmployeeById(Long id) {
 
         Employee returnObejct=  employeeDataRepository.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee","id",id));
+
 //        Employee user = retunObejct.get();
 //        UserDTO userDTO = UserMapperUtility.convertToUserDTO(user);
 //        ResponseEntity<DeportmentDTO> deportmentREST_Response =
 //                restTemplate.getForEntity("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode(), DeportmentDTO.class);
 //        DeportmentDTO deptBody = deportmentREST_Response.getBody();
-
-       DeportmentDTO deportmentDTO= webClient
-               .get().uri("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode())
-                .retrieve()
-                .bodyToMono(DeportmentDTO.class)
-                .block();// To make Synchronous Call
-
-
+    /**
+        Using WebClient , connecting the MicroServices
+     */
+//       DeportmentDTO deportmentDTO= webClient
+//               .get().uri("http://localhost:8081/depormentService/"+returnObejct.getDeportmentCode())
+//                .retrieve()
+//                .bodyToMono(DeportmentDTO.class)
+//                .block();// To make Synchronous Call
+        /**
+         * Using Spring Cloud OpenFeign , connecting the MicroServices
+         */
+        ResponseEntity<DeportmentDTO> deportmentDTO =   openFeignDeptAsClient.getDeportmentById(returnObejct.getDeportmentCode());
+            DeportmentDTO responseBody = deportmentDTO.getBody();
         /**
          * USing MapStruct Utility we are mapping the data between the entity/JPA class and DTO class
          */
         EmployeeDTO employeeDTO = EmployeeMapperStruct.USER_MAPPER_STRUCT.mapToUserDTO(returnObejct);
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
             apiResponseDTO.setEmployeeDTO(employeeDTO);
-            apiResponseDTO.setDeportmentDTO(deportmentDTO);
+            apiResponseDTO.setDeportmentDTO(responseBody);
         return Optional.of(apiResponseDTO);
     }
     @Override
