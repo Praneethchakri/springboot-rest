@@ -2,6 +2,7 @@ package com.hibernate.learning.Advance.Hiberate.controller;
 
 import com.hibernate.learning.Advance.Hiberate.dto.InstructorDTO;
 import com.hibernate.learning.Advance.Hiberate.entity.Instructor;
+import com.hibernate.learning.Advance.Hiberate.entity.InstructorDetails;
 import com.hibernate.learning.Advance.Hiberate.service.InstructorService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.HttpStatus;
@@ -38,7 +39,6 @@ public class InstructorController {
         }
     }
 
-
     @DeleteMapping("/deleteInstructor/{instructorId}")
     public ResponseEntity<?> instructorDelete(@PathVariable(name ="instructorId") int instructorId){
         try {
@@ -46,6 +46,16 @@ public class InstructorController {
             return ResponseEntity.ok(instructorId);
         }catch (Exception e){
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Deleting :: "+e.getMessage());
+        }
+    }
+
+    @GetMapping("/getInstructorDetails/{id}")
+    public ResponseEntity<?> instructorDetailsGetById(@PathVariable(name ="id") int id){
+        try {
+            InstructorDetails instructorDetails =  instructorService.getInstructorDetailsService(id);
+            return ResponseEntity.ok(instructorDetails);
+        }catch (Exception e){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Saving :: "+e.getMessage());
         }
     }
 }

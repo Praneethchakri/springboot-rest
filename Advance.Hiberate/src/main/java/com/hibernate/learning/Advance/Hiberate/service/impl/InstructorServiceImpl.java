@@ -3,6 +3,7 @@ package com.hibernate.learning.Advance.Hiberate.service.impl;
 import com.hibernate.learning.Advance.Hiberate.dao.InstructorDAO;
 import com.hibernate.learning.Advance.Hiberate.dto.InstructorDTO;
 import com.hibernate.learning.Advance.Hiberate.entity.Instructor;
+import com.hibernate.learning.Advance.Hiberate.entity.InstructorDetails;
 import com.hibernate.learning.Advance.Hiberate.service.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,11 @@ public class InstructorServiceImpl implements InstructorService {
     public InstructorDTO getInstructorService(int instructorId) {
         Instructor instructor =  instructorDAO.getInstructorById(instructorId);
         return  INSTRUCTOR_MAPPER_STRUCT.mapToInstructorDTO(instructor);
+    }
+
+    @Override
+    public InstructorDetails getInstructorDetailsService(int id) {
+        return instructorDAO.getInstructorDetailsById(id);
     }
 
 

@@ -14,6 +14,9 @@ public class InstructorDetails {
     private  String youtubeChannelDetails;
     @Column(name = "REVENUE")
     private int revenue;
+    @OneToOne(mappedBy = "instructorDetail",cascade = CascadeType.ALL)
+    @JoinColumn(name ="instructordetailId" )
+    private Instructor instructor;
 
     public InstructorDetails(int id, String youtubeChannelDetails, int revenue) {
         this.id = id;
@@ -46,6 +49,13 @@ public class InstructorDetails {
 
     public void setRevenue(int revenue) {
         this.revenue = revenue;
+    }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
     }
 
     @Override
