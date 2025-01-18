@@ -6,19 +6,25 @@ import jakarta.persistence.*;
 @Table(name = "instructor")
 public class Instructor {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "instructor_SEQ")
-    @SequenceGenerator(name = "instructor_SEQ",sequenceName = "instructor_SEQ",allocationSize = 1)
-    @Column(name = "instructor_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "INSTRUCTOR_SEQ")
+    @SequenceGenerator(name = "INSTRUCTOR_SEQ",sequenceName = "INSTRUCTOR_SEQ",allocationSize = 1)
+    @Column(name = "INSTRUCTOR_ID")
     private int instructorId;
-    @Column(name = "instructor_Name")
+    @Column(name = "INSTRUCTOR_NAME")
     private String instructorName;
-    @Column(name = "emailId")
+    @Column(name = "EMAILID")
     private String mailID;
 
-    @OneToOne
-    @JoinColumn(name = "instructorDetail_Id")
-    private InstructorDetails instructorDetailId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "instructordetailId")
+    private InstructorDetails instructorDetail;
 
+    public Instructor(int instructorId, String instructorName, String mailID) {
+        this.instructorId = instructorId;
+        this.instructorName = instructorName;
+        this.mailID = mailID;
+    }
+    public Instructor() {}
 
     public int getInstructorId() {
         return instructorId;
@@ -44,11 +50,21 @@ public class Instructor {
         this.mailID = mailID;
     }
 
-    public InstructorDetails getInstructorDetailId() {
-        return instructorDetailId;
+    public InstructorDetails getInstructorDetail() {
+        return instructorDetail;
     }
 
-    public void setInstructorDetailId(InstructorDetails instructorDetailId) {
-        this.instructorDetailId = instructorDetailId;
+    public void setInstructorDetail(InstructorDetails instructorDetail) {
+        this.instructorDetail = instructorDetail;
+    }
+
+    @Override
+    public String toString() {
+        return "Instructor{" +
+                "instructorId=" + instructorId +
+                ", instructorName='" + instructorName + '\'' +
+                ", mailID='" + mailID + '\'' +
+                ", instructorDetail=" + instructorDetail +
+                '}';
     }
 }
