@@ -2,6 +2,7 @@ package com.hibernate.learning.Advance.Hiberate.service.impl;
 
 import com.hibernate.learning.Advance.Hiberate.dao.InstructorDAO;
 import com.hibernate.learning.Advance.Hiberate.dto.InstructorDTO;
+import com.hibernate.learning.Advance.Hiberate.dto.InstructorDetailsDTO;
 import com.hibernate.learning.Advance.Hiberate.entity.Instructor;
 import com.hibernate.learning.Advance.Hiberate.entity.InstructorDetails;
 import com.hibernate.learning.Advance.Hiberate.service.InstructorService;
@@ -35,12 +36,25 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorDTO getInstructorService(int instructorId) {
         Instructor instructor =  instructorDAO.getInstructorById(instructorId);
-        return  INSTRUCTOR_MAPPER_STRUCT.mapToInstructorDTO(instructor);
+        return  INSTRUCTOR_MAPPER_STRUCT.instructorToInstructorDTO(instructor);
     }
 
     @Override
-    public InstructorDetails getInstructorDetailsService(int id) {
-        return instructorDAO.getInstructorDetailsById(id);
+    public InstructorDetailsDTO getInstructorDetailsService(int id) {
+        InstructorDetails instructorDetails =  instructorDAO.getInstructorDetailsById(id);
+        System.out.println("Instructor Details "+instructorDetails.toString());
+        System.out.println("Instructor "+instructorDetails.getInstructor());
+        InstructorDTO instructorDTO = INSTRUCTOR_MAPPER_STRUCT.instructorToInstructorDTO(instructorDetails.getInstructor());
+        InstructorDetailsDTO instructorDetailsDTO =INSTRUCTOR_MAPPER_STRUCT.instructorDetailToInstructorDetailsDTO(instructorDetails);
+        instructorDetailsDTO.setInstructorDTO(instructorDTO);
+        System.out.println("InstructorDetailsDTO" +instructorDetailsDTO);
+        return instructorDetailsDTO;
+
+    }
+
+    @Override
+    public void deleteInstructorDetailsService(int id) {
+        instructorDAO.deleteInstructorDetailsByID(id);
     }
 
 

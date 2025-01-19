@@ -8,12 +8,22 @@ public class InstructorDTO {
     private int instructorId;
     private String instructorName;
     private String mailID;
-    private InstructorDetails instructorDetail;
+    private InstructorDetailsDTO instructorDetailDTO;
 
     public InstructorDTO(int instructorId, String instructorName, String mailID) {
         this.instructorId = instructorId;
         this.instructorName = instructorName;
         this.mailID = mailID;
+    }
+
+    public InstructorDTO(int instructorId, String instructorName, String mailID, InstructorDetailsDTO instructorDetailsDTO) {
+        this.instructorId = instructorId;
+        this.instructorName = instructorName;
+        this.mailID = mailID;
+        this.instructorDetailDTO = instructorDetailsDTO;
+    }
+
+    public InstructorDTO() {
     }
 
     public int getInstructorId() {
@@ -40,12 +50,12 @@ public class InstructorDTO {
         this.mailID = mailID;
     }
 
-    public InstructorDetails getInstructorDetail() {
-        return instructorDetail;
+    public InstructorDetailsDTO getInstructorDetailDTO() {
+        return instructorDetailDTO;
     }
 
-    public void setInstructorDetail(InstructorDetails instructorDetail) {
-        this.instructorDetail = instructorDetail;
+    public void setInstructorDetailDTO(InstructorDetailsDTO instructorDetailDTO) {
+        this.instructorDetailDTO = instructorDetailDTO;
     }
 
     @Override
@@ -54,7 +64,7 @@ public class InstructorDTO {
                 "instructorId=" + instructorId +
                 ", instructorName='" + instructorName + '\'' +
                 ", mailID='" + mailID + '\'' +
-                ", instructorDetail=" + instructorDetail +
+                ", instructorDetailDTO=" + instructorDetailDTO +
                 '}';
     }
 }
