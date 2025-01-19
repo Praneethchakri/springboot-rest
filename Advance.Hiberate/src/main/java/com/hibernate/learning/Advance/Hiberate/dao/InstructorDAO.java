@@ -13,5 +13,8 @@ public interface InstructorDAO {
 
     public Instructor getInstructorById(int instructorId);
 
+    //BiDirectional
     public InstructorDetails getInstructorDetailsById(int id);
+
+    public void deleteInstructorDetailsByID(int id);
 }

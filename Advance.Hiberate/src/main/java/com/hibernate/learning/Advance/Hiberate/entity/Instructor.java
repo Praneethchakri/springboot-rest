@@ -1,5 +1,6 @@
 package com.hibernate.learning.Advance.Hiberate.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,8 +16,9 @@ public class Instructor {
     @Column(name = "EMAILID")
     private String mailID;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "instructordetailId")
+    @JsonManagedReference
     private InstructorDetails instructorDetail;
 
     public Instructor(int instructorId, String instructorName, String mailID) {

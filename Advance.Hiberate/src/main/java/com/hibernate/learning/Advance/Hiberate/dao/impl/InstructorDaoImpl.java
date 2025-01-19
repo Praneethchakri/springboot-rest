@@ -22,7 +22,7 @@ public class InstructorDaoImpl implements InstructorDAO {
         System.out.println("Instructor "+instructor.toString());
         entityManager.persist(instructor);
         System.out.println("after Save "+instructor.toString());
-        return INSTRUCTOR_MAPPER_STRUCT.mapToInstructorDTO(instructor);
+        return INSTRUCTOR_MAPPER_STRUCT.instructorToInstructorDTO(instructor);
     }
 
     @Transactional
@@ -35,7 +35,6 @@ public class InstructorDaoImpl implements InstructorDAO {
                 e.getMessage();
             }
     }
-    @Transactional
     @Override
     public Instructor getInstructorById(int instructorId){
        return entityManager.find(Instructor.class,instructorId);
@@ -44,6 +43,12 @@ public class InstructorDaoImpl implements InstructorDAO {
     @Override
     public InstructorDetails getInstructorDetailsById(int id) {
         return entityManager.find(InstructorDetails.class,id);
+    }
+    @Transactional
+    @Override
+    public void deleteInstructorDetailsByID(int id) {
+       InstructorDetails instructorDetails =  entityManager.find(InstructorDetails.class,id);
+       entityManager.remove(instructorDetails);
     }
 
 

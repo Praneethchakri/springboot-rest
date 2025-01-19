@@ -1,5 +1,6 @@
 package com.hibernate.learning.Advance.Hiberate.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,7 +16,7 @@ public class InstructorDetails {
     @Column(name = "REVENUE")
     private int revenue;
     @OneToOne(mappedBy = "instructorDetail",cascade = CascadeType.ALL)
-    @JoinColumn(name ="instructordetailId" )
+    @JsonBackReference
     private Instructor instructor;
 
     public InstructorDetails(int id, String youtubeChannelDetails, int revenue) {

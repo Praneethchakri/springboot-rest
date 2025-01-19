@@ -1,6 +1,7 @@
 package com.hibernate.learning.Advance.Hiberate.controller;
 
 import com.hibernate.learning.Advance.Hiberate.dto.InstructorDTO;
+import com.hibernate.learning.Advance.Hiberate.dto.InstructorDetailsDTO;
 import com.hibernate.learning.Advance.Hiberate.entity.Instructor;
 import com.hibernate.learning.Advance.Hiberate.entity.InstructorDetails;
 import com.hibernate.learning.Advance.Hiberate.service.InstructorService;
@@ -52,10 +53,19 @@ public class InstructorController {
     @GetMapping("/getInstructorDetails/{id}")
     public ResponseEntity<?> instructorDetailsGetById(@PathVariable(name ="id") int id){
         try {
-            InstructorDetails instructorDetails =  instructorService.getInstructorDetailsService(id);
-            return ResponseEntity.ok(instructorDetails);
+            InstructorDetailsDTO instructorDetailsDTO =  instructorService.getInstructorDetailsService(id);
+            return ResponseEntity.ok(instructorDetailsDTO);
         }catch (Exception e){
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Saving :: "+e.getMessage());
+        }
+    }
+    @DeleteMapping("/deleteInstructorDetails/{id}")
+    public ResponseEntity<?> instructorDetailsDelete(@PathVariable(name ="id") int id){
+        try {
+            instructorService.deleteInstructorDetailsService(id);
+            return ResponseEntity.ok(id);
+        }catch (Exception e){
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error While Deleting InstructorDetails:: "+e.getMessage());
         }
     }
 }
